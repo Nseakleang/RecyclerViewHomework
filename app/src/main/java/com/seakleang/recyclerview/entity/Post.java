@@ -1,6 +1,9 @@
 package com.seakleang.recyclerview.entity;
 
-public class Post {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Post implements Parcelable {
 
     int userProfile;
     String userName;
@@ -20,6 +23,27 @@ public class Post {
         this.likeCount = likeCount;
         this.image = image;
     }
+
+    protected Post(Parcel in) {
+        userProfile = in.readInt();
+        userName = in.readString();
+        checkI = in.readString();
+        content = in.readString();
+        likeCount = in.readString();
+        image = in.readInt();
+    }
+
+    public static final Creator<Post> CREATOR = new Creator<Post>() {
+        @Override
+        public Post createFromParcel(Parcel in) {
+            return new Post(in);
+        }
+
+        @Override
+        public Post[] newArray(int size) {
+            return new Post[size];
+        }
+    };
 
     public void setUserProfile(int userProfile) {
         this.userProfile = userProfile;
@@ -67,5 +91,20 @@ public class Post {
 
     public int getImage() {
         return image;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(userProfile);
+        dest.writeString(userName);
+        dest.writeString(checkI);
+        dest.writeString(content);
+        dest.writeString(likeCount);
+        dest.writeInt(image);
     }
 }
