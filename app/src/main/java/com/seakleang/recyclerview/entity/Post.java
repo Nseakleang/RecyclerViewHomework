@@ -94,6 +94,18 @@ public class Post implements Parcelable {
     }
 
     @Override
+    public String toString() {
+        return "Post{" +
+                "userProfile=" + userProfile +
+                ", userName='" + userName + '\'' +
+                ", checkI='" + checkI + '\'' +
+                ", content='" + content + '\'' +
+                ", likeCount='" + likeCount + '\'' +
+                ", image=" + image +
+                '}';
+    }
+
+    @Override
     public int describeContents() {
         return 0;
     }

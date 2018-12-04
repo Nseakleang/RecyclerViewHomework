@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewDebug;
 import android.widget.Toast;
 
 import com.seakleang.recyclerview.adapter.PostAdapter;
@@ -21,8 +22,8 @@ public class CardActivity extends AppCompatActivity implements PostAdapter.PostC
     private RecyclerView recyclerView;
     private PostAdapter adapter;
     private List<Post> postList = new ArrayList<>();
-    private static int REQUEST_CODE_POST;
-    private static int REQUEST_CODE_EDIT_POST;
+    private static final int REQUEST_CODE_POST = 0;
+    private static final int REQUEST_CODE_EDIT_POST = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,11 +82,11 @@ public class CardActivity extends AppCompatActivity implements PostAdapter.PostC
             adapter.notifyItemInserted(0);
             setRecyclerViewScroll(0);
         }
-        if (requestCode==REQUEST_CODE_EDIT_POST && requestCode==RESULT_OK){
-            //Post post = data.getParcelableExtra("post");
-            //postList.set(getIntent().getExtras().getInt("position"),post);
-            //adapter.notifyDataSetChanged();
-            Toast.makeText(this, "Edit", Toast.LENGTH_SHORT).show();
+        if (requestCode==REQUEST_CODE_EDIT_POST && resultCode==RESULT_OK){
+            int position = data.getIntExtra("position",0);
+            Post post = data.getParcelableExtra("post");
+            postList.set(position,post);
+            adapter.notifyItemChanged(position);
         }
     }
 
@@ -104,8 +105,8 @@ public class CardActivity extends AppCompatActivity implements PostAdapter.PostC
         Intent intent = new Intent(CardActivity.this, PostActivity.class);
         Bundle bundle = new Bundle();
         bundle.putParcelable("post",post);
-        bundle.putInt("position",position);
         intent.putExtras(bundle);
+        intent.putExtra("position",position);
         startActivityForResult(intent,REQUEST_CODE_EDIT_POST);
 
     }

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.seakleang.recyclerview.entity.Post;
 
@@ -48,14 +49,15 @@ public class PostActivity extends AppCompatActivity implements View.OnClickListe
             finish();
         }
         if (v.getId()==R.id.btnSave){
+            int position = getIntent().getIntExtra("position",0);
             Post post = new Post();
             post = getIntent().getParcelableExtra("post");
             post.setContent(textPost.getText().toString());
             Intent intent = new Intent();
             Bundle bundle = new Bundle();
             bundle.putParcelable("post",post);
-            bundle.putInt("position",getIntent().getExtras().getInt("position"));
             intent.putExtras(bundle);
+            intent.putExtra("position",position);
             setResult(RESULT_OK,intent);
             finish();
         }
