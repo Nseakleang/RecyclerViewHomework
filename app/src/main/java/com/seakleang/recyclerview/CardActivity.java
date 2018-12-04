@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.seakleang.recyclerview.adapter.PostAdapter;
 import com.seakleang.recyclerview.entity.Post;
@@ -15,12 +16,13 @@ import com.seakleang.recyclerview.entity.Post;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CardActivity extends AppCompatActivity {
+public class CardActivity extends AppCompatActivity implements PostAdapter.PostCallback {
 
     private RecyclerView recyclerView;
     private PostAdapter adapter;
     private List<Post> postList = new ArrayList<>();
     private static int REQUEST_CODE_POST;
+    private static int REQUEST_CODE_EDIT_POST;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,9 +81,32 @@ public class CardActivity extends AppCompatActivity {
             adapter.notifyItemInserted(0);
             setRecyclerViewScroll(0);
         }
+        if (requestCode==REQUEST_CODE_EDIT_POST && requestCode==RESULT_OK){
+            //Post post = data.getParcelableExtra("post");
+            //postList.set(getIntent().getExtras().getInt("position"),post);
+            //adapter.notifyDataSetChanged();
+            Toast.makeText(this, "Edit", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void setRecyclerViewScroll(int positiion){
         recyclerView.smoothScrollToPosition(positiion);
+    }
+
+    @Override
+    public void removePost(Post post, int position) {
+        postList.remove(post);
+        adapter.notifyItemRemoved(position);
+    }
+
+    @Override
+    public void editPost(Post post, int position) {
+        Intent intent = new Intent(CardActivity.this, PostActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("post",post);
+        bundle.putInt("position",position);
+        intent.putExtras(bundle);
+        startActivityForResult(intent,REQUEST_CODE_EDIT_POST);
+
     }
 }
